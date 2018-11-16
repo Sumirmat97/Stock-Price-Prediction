@@ -14,7 +14,7 @@ def roundfn(var):
 def preprocessing(dataFrame):
     '''
     Preprocessing of data frame adding some useful columns
-    :param df: data frame after normalization
+    :param dataFrame: data frame after interpolation
     :return: preprocessed data frame
     '''
 
