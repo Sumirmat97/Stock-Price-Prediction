@@ -14,7 +14,7 @@ def roundfn(var):
 def preprocessing(dataFrame):
     '''
     Preprocessing of data frame adding some useful columns
-    :param df: data frame after normalization
+    :param dataFrame: data frame after interpolation
     :return: preprocessed data frame
     '''
 
@@ -86,6 +86,6 @@ def preprocessing(dataFrame):
 
         curr_volatility = 0.0
 
-    dataFrame.to_csv("../AugmentedStock.csv", encoding='utf-8')
+    #dataFrame.to_csv("../ProcessedStock.csv", encoding='utf-8')
 
     return dataFrame
