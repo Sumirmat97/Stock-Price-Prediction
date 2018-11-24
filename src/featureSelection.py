@@ -2,7 +2,7 @@
 Feature Selection
 '''
 
-from AllowedModels import AllowedModels
+from allowedModels import AllowedModels
 from sklearn.feature_selection import RFE
 from sklearn.svm import SVR
 from sklearn.tree import DecisionTreeRegressor
