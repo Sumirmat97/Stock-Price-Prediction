@@ -3,12 +3,12 @@ from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.model_selection import TimeSeriesSplit, GridSearchCV
 from sklearn.externals import joblib
 from sklearn.metrics import mean_absolute_error, make_scorer
-import matplotlib.pyplot as plt
+from makeGraph import makeGraph
 
 import logging
 Logger = logging.getLogger('GradientBoost.stdout')
 
-def gradientBoost(X_train,y_train,X_test,y_test,cpus):
+def gradientBoost(X_train, y_train, X_test, y_test, cpus, Identifier):
     '''
         Fits Gradient Boosting Regression model on the data provided after feature selection.
     :param X_train: the data frame containing the selected features for training
@@ -16,6 +16,7 @@ def gradientBoost(X_train,y_train,X_test,y_test,cpus):
     :param X_test: the data frame of containing the selected features for testing
     :param y_test: the data frame of target variable for testing
     :param cpus: no of cores to be used (refer to ParseArgs() in main.py)
+    :param Identifier: whether called for time series prediction or news prediction
     :return: returns the error score and predicted values
     '''
 
@@ -35,18 +36,20 @@ def gradientBoost(X_train,y_train,X_test,y_test,cpus):
     Logger.info("Best Gradient Boost Model: {}".format(model))
 
     # save the model to disk
-    filename = '..\Models\GradientBoost.sav'
+    if Identifier != "News":
+        filename = '../Models/GradientBoost'+'TimeSeries'+'.sav'
+    else:
+        filename = '../Models/GradientBoost'+'News'+'.sav'
     joblib.dump(model, filename)
 
     prediction = model.predict(X_test)
     prediction = pd.DataFrame(prediction,index=y_test.index)
     error = mean_absolute_error(y_test,prediction)
 
-    plt.plot(y_test.index,y_test,'r',prediction.index,prediction,'b')
-    plt.xlabel("Dates")
-    plt.ylabel("Stock closing values")
-    plt.title("Gradient Boosting")
-    plt.show()
+    if Identifier != "News":
+        makeGraph(y_test,valueFromTimeSeries=prediction,name="Time Series - Gradient Boosting")
+    else:
+        makeGraph(y_test,valueFromNews=prediction,name="News - Gradient Boosting")
 
-    print()
+    print(prediction)
     return error,prediction

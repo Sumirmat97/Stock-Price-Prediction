@@ -3,12 +3,12 @@ from sklearn.neighbors import KNeighborsRegressor
 from sklearn.model_selection import TimeSeriesSplit, GridSearchCV
 from sklearn.externals import joblib
 from sklearn.metrics import mean_absolute_error
-import matplotlib.pyplot as plt
+from makeGraph import makeGraph
 
 import logging
 Logger = logging.getLogger('KNearestNeighbors.stdout')
 
-def kNeighbor(X_train,y_train,X_test,y_test,cpus):
+def kNeighbor(X_train, y_train, X_test, y_test, cpus, Identifier):
 
     '''
         Fits K Neighbors Regression model on the data provided after feature selection.
@@ -17,6 +17,7 @@ def kNeighbor(X_train,y_train,X_test,y_test,cpus):
     :param X_test: the data frame of containing the selected features for testing
     :param y_test: the data frame of target variable for testing
     :param cpus: no of cores to be used (refer to ParseArgs() in main.py)
+    :param Identifier: whether called for time series prediction or news prediction
     :return: returns the error score and predicted values
     '''
 
@@ -34,19 +35,20 @@ def kNeighbor(X_train,y_train,X_test,y_test,cpus):
     print("Best K Neighbours Model: {}".format(model))
 
     # save the model to disk
-    filename = '..\Models\KNeighbour.sav'
+    if Identifier != "News":
+        filename = '../Models/KNeighbor'+'TimeSeries'+'.sav'
+    else:
+        filename = '../Models/KNeighbor'+'News'+'.sav'
     joblib.dump(model, filename)
 
     prediction = model.predict(X_test)
     prediction = pd.DataFrame(prediction,index=y_test.index)
     error = mean_absolute_error(y_test,prediction)
 
-    plt.plot(y_test.index,y_test,'r',prediction.index,prediction,'b')
-    plt.xlabel("Dates")
-    plt.ylabel("Stock closing values")
-    plt.title("K Neighbors")
-    plt.show()
-
+    if Identifier != "News":
+        makeGraph(y_test,valueFromTimeSeries=prediction,name="Time Series - K Neighbor")
+    else:
+        makeGraph(y_test,valueFromNews=prediction,name="News - K Neighbor")
     print(prediction)
 
     return error,prediction
