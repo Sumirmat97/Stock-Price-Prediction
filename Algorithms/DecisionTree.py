@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.externals import joblib
 from sklearn.model_selection import TimeSeriesSplit, GridSearchCV
-from sklearn.metrics import mean_absolute_error, mean_squared_error,make_scorer
+from sklearn.metrics import mean_absolute_error, make_scorer
 from makeGraph import makeGraph
 from scipy.stats import mannwhitneyu
 
@@ -51,7 +51,7 @@ def decisionTree(X_train, y_train, X_test, y_test, cpus, Identifier):
     else:
         makeGraph(y_test,valueFromNews=prediction,name="News - Decision Tree")
 
-    print(prediction)
-    statitic,pvalue = mannwhitneyu(y_test,pd.Series(prediction[0]))
+    #print(prediction)
+    statistic,pvalue = mannwhitneyu(y_test,pd.Series(prediction[0]))
 
     return error,prediction,pvalue

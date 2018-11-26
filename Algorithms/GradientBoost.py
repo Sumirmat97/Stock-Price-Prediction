@@ -52,7 +52,7 @@ def gradientBoost(X_train, y_train, X_test, y_test, cpus, Identifier):
     else:
         makeGraph(y_test,valueFromNews=prediction,name="News - Gradient Boosting")
 
-    print(prediction)
-    statitic,pvalue = mannwhitneyu(y_test,pd.Series(prediction[0]))
+    #print(prediction)
+    statistic,pvalue = mannwhitneyu(y_test,pd.Series(prediction[0]))
 
     return error,prediction,pvalue

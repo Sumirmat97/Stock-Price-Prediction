@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.linear_model import BayesianRidge
 from sklearn.externals import joblib
-from sklearn.metrics import mean_absolute_error, make_scorer
+from sklearn.metrics import mean_absolute_error
 from makeGraph import makeGraph
 from scipy.stats import mannwhitneyu
 
@@ -37,8 +37,8 @@ def bayesianRidge(X_train,y_train,X_test,y_test,Identifier):
     else:
         makeGraph(y_test,valueFromNews=prediction,name="News - Bayesian Ridge")
 
-    print(prediction)
-    statitic,pvalue = mannwhitneyu(y_test,pd.Series(prediction[0]))
+    #print(prediction)
+    statistic,pvalue = mannwhitneyu(y_test,pd.Series(prediction[0]))
 
     return error,prediction,pvalue
 
