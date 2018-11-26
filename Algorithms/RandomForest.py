@@ -4,6 +4,7 @@ from sklearn.model_selection import TimeSeriesSplit, GridSearchCV
 from sklearn.externals import joblib
 from sklearn.metrics import mean_absolute_error, make_scorer
 from makeGraph import makeGraph
+from scipy.stats import mannwhitneyu
 
 import logging
 Logger = logging.getLogger('RandomForest.stdout')
@@ -51,4 +52,6 @@ def randomForest(X_train, y_train, X_test, y_test, cpus, Identifier):
         makeGraph(y_test,valueFromNews=prediction,name="News - Random Forest")
 
     print(prediction)
-    return error,prediction
+    statitic,pvalue = mannwhitneyu(y_test,pd.Series(prediction[0]))
+
+    return error,prediction,pvalue

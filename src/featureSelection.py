@@ -5,8 +5,10 @@ Feature Selection
 from allowedModels import AllowedModels
 from sklearn.feature_selection import RFE
 from sklearn.svm import SVR
-from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor,GradientBoostingRegressor
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.linear_model import BayesianRidge
+from sklearn.linear_model import LinearRegression
 import logging
 
 
@@ -35,6 +37,10 @@ class FeatureSelector:
             return self.__gradientBoost(attributes,target,numberOfRequiredFeatures)
         elif modelName == AllowedModels.DECISION_TREE:
             return self.__decisionTree(attributes,target,numberOfRequiredFeatures)
+        elif modelName == AllowedModels.BAYESIAN_RIDGE:
+            return self.__bayesianRidge(attributes,target,numberOfRequiredFeatures)
+        elif modelName == AllowedModels.BAYESIAN_RIDGE:
+            return self.__linearRegression(attributes,target,numberOfRequiredFeatures)
         else:
             return attributes, target
 
@@ -108,4 +114,40 @@ class FeatureSelector:
         featuredSelectedDataSet = selected_attributes.copy()
         featuredSelectedDataSet['close'] = target
         featuredSelectedDataSet.to_csv("..\FeatureSelectedStockDecisionTree" + str(numberOfRequiredFeatures) + ".csv", encoding='utf-8')
+        return selected_attributes, target
+
+    def __bayesianRidge(self,attributes,target,numberOfRequiredFeatures):
+        estimator = BayesianRidge()
+        selector = RFE(estimator, numberOfRequiredFeatures, step=1)
+        selector = selector.fit(attributes, target)
+        self.Logger.info(selector.support_)
+        self.Logger.info(selector.ranking_)
+        selected_attributes = attributes.copy()
+        index = 0
+        indexNames = list(attributes.columns.values)
+        for name in indexNames:
+            if not selector.support_[index]:
+                selected_attributes = selected_attributes.drop(name, axis=1)
+            index = index + 1
+        featuredSelectedDataSet = selected_attributes.copy()
+        featuredSelectedDataSet['close'] = target
+        featuredSelectedDataSet.to_csv("..\FeatureSelectedStockBayesianRidge" + str(numberOfRequiredFeatures) + ".csv", encoding='utf-8')
+        return selected_attributes, target
+
+    def __linearRegression(self,attributes,target,numberOfRequiredFeatures):
+        estimator = LinearRegression()
+        selector = RFE(estimator, numberOfRequiredFeatures, step=1)
+        selector = selector.fit(attributes, target)
+        self.Logger.info(selector.support_)
+        self.Logger.info(selector.ranking_)
+        selected_attributes = attributes.copy()
+        index = 0
+        indexNames = list(attributes.columns.values)
+        for name in indexNames:
+            if not selector.support_[index]:
+                selected_attributes = selected_attributes.drop(name, axis=1)
+            index = index + 1
+        featuredSelectedDataSet = selected_attributes.copy()
+        featuredSelectedDataSet['close'] = target
+        featuredSelectedDataSet.to_csv("..\FeatureSelectedStockLinearRegression" + str(numberOfRequiredFeatures) + ".csv", encoding='utf-8')
         return selected_attributes, target

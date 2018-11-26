@@ -4,6 +4,7 @@ from sklearn.gaussian_process.kernels import DotProduct, WhiteKernel
 from sklearn.externals import joblib
 from sklearn.metrics import mean_absolute_error
 from makeGraph import makeGraph
+from scipy.stats import mannwhitneyu
 
 import logging
 Logger = logging.getLogger('GaussianProcess.stdout')
@@ -41,6 +42,8 @@ def gaussianProcess(X_train, y_train, X_test, y_test, Identifier):
         makeGraph(y_test,valueFromTimeSeries=prediction,name="Time Series - Gaussian Process")
     else:
         makeGraph(y_test,valueFromNews=prediction,name="News - Gaussian Process")
-    print(prediction)
 
-    return error,prediction
+    print(prediction)
+    statitic,pvalue = mannwhitneyu(y_test,pd.Series(prediction[0]))
+
+    return error,prediction,pvalue
