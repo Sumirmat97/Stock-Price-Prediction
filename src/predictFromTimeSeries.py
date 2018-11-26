@@ -41,7 +41,7 @@ def predictFromTimeSeries(attributes, target, testAttributes, testTarget,nCpuCor
     featureSelector = FeatureSelector()
 
     #Feature Selection for Bayesian Ridge
-    attributesBR, targetBR = featureSelector.featureSelection(attributes, target, 6)
+    attributesBR, targetBR = featureSelector.featureSelection(attributes,target,6,modelName = AllowedModels.BAYESIAN_RIDGE)
     testAttributesBR = testAttributes[attributesBR.columns]
 
     #Training and testing Bayesian Ridge model
@@ -83,7 +83,7 @@ def predictFromTimeSeries(attributes, target, testAttributes, testTarget,nCpuCor
     pValues['K Neighbor'] = pvalue
 
     #Feature Selection for Linear Regression
-    attributesLR, targetLR = featureSelector.featureSelection(attributes, target, 6)
+    attributesLR, targetLR = featureSelector.featureSelection(attributes,target,6,modelName = AllowedModels.LINEAR_REGRESSION)
     testAttributesLR = testAttributes[attributesLR.columns]
 
     #Training and testing Linear Regression model
@@ -103,7 +103,7 @@ def predictFromTimeSeries(attributes, target, testAttributes, testTarget,nCpuCor
     pValues['Random Forest'] = pvalue
 
     #Feature Selection for SVR
-    attributesSVR, targetSVR = featureSelector.featureSelection(attributes, target, 6)
+    attributesSVR, targetSVR = featureSelector.featureSelection(attributes,target,6,modelName = AllowedModels.SVR)
     testAttributesSVR = testAttributes[attributesSVR.columns]
 
     #Training and testing SVR model
