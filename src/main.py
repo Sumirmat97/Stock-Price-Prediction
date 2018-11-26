@@ -3,13 +3,14 @@ import psutil, argparse, logging
 
 from interpolation import interpolate
 from preprocessing import preprocessing
-from normalization import normalize
-from predictFromHistory import predictFromHistory
-import matplotlib.pyplot as plt
+from predictFromTimeSeries import predictFromTimeSeries
+from cleaning import clean
+from embeddings import embeddings
+from predictFromNews import predictFromNews
+from combinePredictions import combinePredictions
 
 logging.basicConfig(filename='StockLogger.log', filemode='w', level=logging.DEBUG)
 Logger = logging.getLogger('main.stdout')
-
 
 def main(Args):
     '''
@@ -22,10 +23,13 @@ def main(Args):
     nCpuCores= Args.ncpucores
     testStockFilePath = Args.teststockfilepath
     testNewsFilePath = Args.testnewsfilepath
-    model= Args.model
+    modelTimeSeries = Args.modeltimeseries
+    modelNews = Args.modelnews
 
     Logger.debug("StockDataPath: {}, NewsDataPath: {}, NCpuCores: {}, TestStockFilePath: {}, TestNewsFilePath: {}"
                      .format(stockFilePath, newsFilePath, nCpuCores,testStockFilePath,testNewsFilePath))
+
+    #Time Series Analysis
     dataFrame = pd.read_csv(stockFilePath, parse_dates=True,index_col="date")
     testDataFrame = pd.read_csv(testStockFilePath,parse_dates=True,index_col="date")
 
@@ -43,12 +47,28 @@ def main(Args):
     testAttributes = testDataFrame.drop('close',axis=1)
     testTarget = testDataFrame.loc[:,'close']
 
-    #Normalization
-    attributes, target = normalize(attributes, target)
-    testAttributes,testTarget = normalize(testAttributes, testTarget)
+    #Normalization - converting values to comparable range
+    attributes['volume'] /= 100000
+    testAttributes['volume'] /= 100000
 
-    #Finding best model to predict Time Series of stock prices
-    predictFromHistory(attributes, target, testAttributes, testTarget, nCpuCores)
+    #Predictions and errors of different algorithms for news
+    errorTimeSeries,predictionTimeSeries = predictFromTimeSeries(attributes, target, testAttributes, testTarget, nCpuCores)
+
+    #News Analysis
+    newsDataFrame = pd.read_csv(newsFilePath,parse_dates=True,index_col='date')
+    testNewsDataFrame = pd.read_csv(testNewsFilePath,parse_dates=True,index_col='date')
+
+    #Cleaning of textual data
+    newsAttributes,newsTarget = clean(newsDataFrame)
+    newsTestAttributes,newsTestTarget = clean(testNewsDataFrame)
+
+    #Embeddings
+    newsAttributes,newsTestAttributes = embeddings(newsAttributes,newsTestAttributes)
+
+    #Predictions and errors of different algorithms for news
+    errorNews,predictionNews = predictFromNews(newsAttributes,newsTarget,newsTestAttributes,newsTestTarget,nCpuCores)
+
+    combinePredictions(errorTimeSeries,errorNews,predictionTimeSeries,predictionNews,testTarget)
 
 def ParseArgs():
     Args = argparse.ArgumentParser(description="Prediction of Stock Prices")
@@ -60,10 +80,12 @@ def ParseArgs():
                       help="Absolute path of csv file having data of stock prices for testing")
     Args.add_argument("--testnewsfilepath",
                       help="Absolute path of csv file having news for testing")
-    Args.add_argument("--ncpucores", type= int, default= psutil.cpu_count(),
-                      help= "Number of CPUs that will be used for processing")
-    Args.add_argument("--model",
-                      help="Absolute path to the saved model file(.pkl extension)")
+    Args.add_argument("--ncpucores", type=int, default=psutil.cpu_count(),
+                      help="Number of CPUs that will be used for processing")
+    Args.add_argument("--modeltimeseries",
+                      help="Absolute path to the saved model file for time series prediction(.sav extension)")
+    Args.add_argument("--modelnews",
+                      help="Absolute path to the saved model file for news prediction(.sav extension)")
     return Args.parse_args()
 
 if __name__ == "__main__":
