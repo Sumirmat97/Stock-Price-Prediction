@@ -38,4 +38,4 @@ def makeGraph(valueOriginal, valueFromTimeSeries = None, valueFromNews = None, v
     manager.resize(*manager.window.maxsize())
     graph = plt.gcf()
     plt.show()
-    graph.savefig('../PredictedGraphs/' + name + ".png" )
+    graph.savefig('../PredictedGraphs/' + name + ".svg" )

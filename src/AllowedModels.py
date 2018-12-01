@@ -10,4 +10,5 @@ class AllowedModels(Enum):
     RANDOM_FOREST = 2
     GRADIENT_BOOST = 3
     DECISION_TREE = 4
-    NO_MODEL = 5
+    BAYESIAN_RIDGE = 5
+    LINEAR_REGRESSION = 6

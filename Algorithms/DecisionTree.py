@@ -4,6 +4,7 @@ from sklearn.externals import joblib
 from sklearn.model_selection import TimeSeriesSplit, GridSearchCV
 from sklearn.metrics import mean_absolute_error, make_scorer
 from makeGraph import makeGraph
+from scipy.stats import mannwhitneyu
 
 import logging
 Logger = logging.getLogger('DecisionTree.stdout')
@@ -22,15 +23,13 @@ def decisionTree(X_train, y_train, X_test, y_test, cpus, Identifier):
     '''
 
     decisionTree = DecisionTreeRegressor()
-
-    params = {'max_depth':[100,500,1000,2000,5000],'random_state':[1]}
+    params = {'max_depth':[30,100,500,1000,2000,5000],'random_state':[1]}
 
     scorer = make_scorer(mean_absolute_error)
     timeSeriesSplit = TimeSeriesSplit(n_splits=3).split(X_train)
     gridSearch = GridSearchCV(estimator = decisionTree, cv = timeSeriesSplit, param_grid = params, n_jobs = cpus, scoring=scorer)
 
     gridSearch.fit(X_train,y_train)
-
     model = gridSearch.best_estimator_
 
     Logger.info("Best Decision Tree score: {}".format(gridSearch.best_score_))
@@ -51,6 +50,8 @@ def decisionTree(X_train, y_train, X_test, y_test, cpus, Identifier):
         makeGraph(y_test,valueFromTimeSeries=prediction,name="Time Series - Decision Tree ")
     else:
         makeGraph(y_test,valueFromNews=prediction,name="News - Decision Tree")
-    print(prediction)
 
-    return error,prediction
+    #print(prediction)
+    statistic,pvalue = mannwhitneyu(y_test,pd.Series(prediction[0]))
+
+    return error,prediction,pvalue
