@@ -2,7 +2,7 @@
 Predicting stock close prices using past data of stock with suitable features
 '''
 
-import sys
+import sys,json
 sys.path.insert(0, '..\Algorithms')
 
 from featureSelection import FeatureSelector
@@ -35,6 +35,7 @@ def predictFromTimeSeries(attributes, target, testAttributes, testTarget,nCpuCor
     scores = {}
     predictions = {}
     pValues = {}
+    features = {}
     Identifier = "Time Series"
 
     #Feature Selection
@@ -43,6 +44,7 @@ def predictFromTimeSeries(attributes, target, testAttributes, testTarget,nCpuCor
     #Feature Selection for Bayesian Ridge
     attributesBR, targetBR = featureSelector.featureSelection(attributes,target,6,modelName = AllowedModels.BAYESIAN_RIDGE)
     testAttributesBR = testAttributes[attributesBR.columns]
+    features['Bayesian Ridge'] = list(attributesBR.columns)
 
     #Training and testing Bayesian Ridge model
     error,predictedValues,pvalue = bayesianRidge(attributesBR,targetBR,testAttributesBR,testTarget,Identifier)
@@ -53,6 +55,7 @@ def predictFromTimeSeries(attributes, target, testAttributes, testTarget,nCpuCor
     #Feature Selection for Decision Trees Regression
     attributesDT, targetDT = featureSelector.featureSelection(attributes,target,6,modelName = AllowedModels.DECISION_TREE)
     testAttributesDT = testAttributes[attributesDT.columns]
+    features['Decision Tree'] = list(attributesDT.columns)
 
     #Training and testing Decision Tree Regression model
     error,predictedValues,pvalue = decisionTree(attributesDT,targetDT,testAttributesDT,testTarget,nCpuCores,Identifier)
@@ -69,6 +72,7 @@ def predictFromTimeSeries(attributes, target, testAttributes, testTarget,nCpuCor
     #Feature Selection for Gradient Boosting Regression
     attributesGB, targetGB = featureSelector.featureSelection(attributes,target,6,modelName = AllowedModels.GRADIENT_BOOST)
     testAttributesGB = testAttributes[attributesGB.columns]
+    features['Gradient Boost'] = list(attributesGB.columns)
 
     #Training and testing Gradient Boosting Regression model
     error,predictedValues,pvalue = gradientBoost(attributesGB,targetGB,testAttributesGB,testTarget,nCpuCores,Identifier)
@@ -85,6 +89,7 @@ def predictFromTimeSeries(attributes, target, testAttributes, testTarget,nCpuCor
     #Feature Selection for Linear Regression
     attributesLR, targetLR = featureSelector.featureSelection(attributes,target,6,modelName = AllowedModels.LINEAR_REGRESSION)
     testAttributesLR = testAttributes[attributesLR.columns]
+    features['Linear Regression'] = list(attributesLR.columns)
 
     #Training and testing Linear Regression model
     error,predictedValues,pvalue = linearRegression(attributesLR,targetLR,testAttributesLR,testTarget,nCpuCores,Identifier)
@@ -95,6 +100,7 @@ def predictFromTimeSeries(attributes, target, testAttributes, testTarget,nCpuCor
     #Feature Selection for Random Forests Regression
     attributesRF, targetRF = featureSelector.featureSelection(attributes,target,6,modelName = AllowedModels.RANDOM_FOREST)
     testAttributesRF = testAttributes[attributesRF.columns]
+    features['Random Forest'] = list(attributesRF.columns)
 
     #Training and testing Random Forests Regression model
     error,predictedValues,pvalue = randomForest(attributesRF,targetRF,testAttributesRF,testTarget,nCpuCores,Identifier)
@@ -105,6 +111,7 @@ def predictFromTimeSeries(attributes, target, testAttributes, testTarget,nCpuCor
     #Feature Selection for SVR
     attributesSVR, targetSVR = featureSelector.featureSelection(attributes,target,6,modelName = AllowedModels.SVR)
     testAttributesSVR = testAttributes[attributesSVR.columns]
+    features['SVR'] = list(attributesSVR.columns)
 
     #Training and testing SVR model
     error,predictedValues,pvalue = svr(attributesSVR,targetSVR,testAttributesSVR,testTarget,nCpuCores,Identifier)
@@ -114,4 +121,8 @@ def predictFromTimeSeries(attributes, target, testAttributes, testTarget,nCpuCor
 
     print("Error scores in time series prediction = {}".format(scores))
     print("P-Values in time series prediction = {}".format(pValues))
+
+    with open(str('..\\features.json'),'w') as featureFile:
+        json.dump(features,featureFile)
+
     return scores,predictions

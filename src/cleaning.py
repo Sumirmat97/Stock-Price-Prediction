@@ -16,10 +16,21 @@ def clean(dataFrame):
     '''
 
     text_field = "news"
-    predict_field = 'close'
+    predict_field = "close"
     dataFrame[text_field] = dataFrame[text_field].apply(lambda row: cleaner(row))
 
     return dataFrame[text_field],dataFrame[predict_field]
+
+def cleanForPrediction(dataFrame):
+    '''
+        Calls function to clean textual data required in case of prediction of certain days using saved models
+    :param dataFrame: news from predictDay function
+    :return: cleaned news data frame
+    '''
+
+    text_field = "news"
+    dataFrame = dataFrame[text_field].apply(lambda row: cleaner(row))
+    return dataFrame
 
 def cleaner(text):
     '''

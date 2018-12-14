@@ -16,7 +16,7 @@ def makeGraph(valueOriginal, valueFromTimeSeries = None, valueFromNews = None, v
     if valueFromTimeSeries is not None and valueFromNews is not None:
         plt.plot(valueOriginal.index,valueOriginal,'r',label='Original Values')
         plt.plot(valueFromTimeSeries.index,valueFromTimeSeries,'b',label='Time Series Prediction')
-        plt.plot(valueFromNews.index,valueFromNews,'g',label='News Analysis Prediction')
+        plt.plot(valueFromNews.index,valueFromNews,'g',label='Prediction from news')
 
     elif valueFromTimeSeries is not None:
         plt.plot(valueOriginal.index,valueOriginal,'r',label='Original Values')
@@ -24,7 +24,7 @@ def makeGraph(valueOriginal, valueFromTimeSeries = None, valueFromNews = None, v
 
     elif valueFromNews is not None :
         plt.plot(valueOriginal.index,valueOriginal,'r',label='Original Value')
-        plt.plot(valueFromNews.index,valueFromNews,'b',label='News Analysis Prediction')
+        plt.plot(valueFromNews.index,valueFromNews,'b',label='Prediction from news')
 
     elif valueCombined is not None:
         plt.plot(valueOriginal.index,valueOriginal,'r',label='Original Value')
@@ -38,4 +38,4 @@ def makeGraph(valueOriginal, valueFromTimeSeries = None, valueFromNews = None, v
     manager.resize(*manager.window.maxsize())
     graph = plt.gcf()
     plt.show()
-    graph.savefig('../PredictedGraphs/' + name + ".svg" )
+    graph.savefig('../PredictedGraphs/' + name + ".png" )
