@@ -34,7 +34,8 @@ Either of the models are optional.
 ## How do I set up ##
 1. Clone or download the project
 1. Python 3.6 or higher is required 
-1. Run the command: pip install -r requirements.txt
+1. Run the command: 
+``` pip install -r requirements.txt ```
 
 ## Who do I talk to ? ##
 * Repo owners
