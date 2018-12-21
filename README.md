@@ -12,8 +12,8 @@ The users can either train the models with their data and then use the for predi
 (We suggest 10 news for each day should be appended and then given in same column.)
   **Note:  The dates in news train and test files should be same and in same order as in train and test files of the stock's data.**
 1. The command to run the application is (in src folder): 
-``` 
-  python main.py --stockfilepath ..\trainStockData.csv --teststockfilepath ..\testStockData.csv --newsfilepath ..\trainNewsData.csv --testnewsfilepath ..\testNewsData.csv
+```
+python main.py --stockfilepath ..\trainStockData.csv --teststockfilepath ..\testStockData.csv --newsfilepath ..\trainNewsData.csv --testnewsfilepath ..\testNewsData.csv
 ```
 The application will train models and also show the graphs after testing the models on test data.
 
