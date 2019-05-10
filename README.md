@@ -32,8 +32,9 @@ python main.py --predict 1 --stockfilepath ..\predictStockData.csv --newsfilepat
 Either of the models are optional.
 
 ## How do I set up ##
-1. Clone or download the project
-1. Python 3.6 or higher is required 
+1. Python 3.6 or higher is required
+1. Clone or download the project 
+1. Download and extract "GoogleNews-vectors-negative300.bin" from https://github.com/mmihaltz/word2vec-GoogleNews-vectors 
 1. Run the command: 
 ``` pip install -r requirements.txt ```
 
