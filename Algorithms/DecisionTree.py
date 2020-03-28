@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.externals import joblib
+import joblib
 from sklearn.model_selection import TimeSeriesSplit, GridSearchCV
 from sklearn.metrics import mean_absolute_error, make_scorer
 from makeGraph import makeGraph

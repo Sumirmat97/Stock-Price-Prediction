@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import DotProduct, WhiteKernel
-from sklearn.externals import joblib
+import joblib
 from sklearn.metrics import mean_absolute_error
 from makeGraph import makeGraph
 from scipy.stats import mannwhitneyu

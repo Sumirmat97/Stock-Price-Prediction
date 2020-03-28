@@ -1,8 +1,9 @@
-nltk==3.3
+joblib
+nltk==3.4.5
 pandas==0.23.4
 scipy==1.1.0
-psutil==5.4.8
+psutil==5.7.0
 gensim==3.6.0
 numpy==1.15.1
 matplotlib==3.0.0
-scikit_learn==0.20.2
+scikit_learn==0.22.2

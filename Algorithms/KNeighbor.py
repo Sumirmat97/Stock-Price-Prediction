@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.model_selection import TimeSeriesSplit, GridSearchCV
-from sklearn.externals import joblib
+import joblib
 from sklearn.metrics import mean_absolute_error
 from makeGraph import makeGraph
 from scipy.stats import mannwhitneyu

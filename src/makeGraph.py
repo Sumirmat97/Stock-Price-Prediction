@@ -37,5 +37,5 @@ def makeGraph(valueOriginal, valueFromTimeSeries = None, valueFromNews = None, v
     manager = plt.get_current_fig_manager()
     manager.resize(*manager.window.maxsize())
     graph = plt.gcf()
-    plt.show()
+    #plt.show()
     graph.savefig('../PredictedGraphs/' + name + ".png" )
