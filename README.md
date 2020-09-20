@@ -7,7 +7,7 @@ It is a stock price prediction application made in Python.
 The users can either train the models with their data and then use the for predictions or predict the stock prices of "Bank of Baroda" using the existing models.
 ### To train models and predict prices: ###
 1. Provide the past data of that stock you want to predict in csv format in trainStockData.csv and some data for testing the models in testStockData.csv, the columns should be: "date","open","low","high","close","adj_close","volume". 
-(We have used 3 years data in traing and 1 year data for testing of the models)
+(We have used 3 years data in training and 1 year data for testing of the models)
 1. Provide the corresponding economical news for that stock in csv format in trainNewsData.csv and some data for testing the models in testNewsData.csv, the columns should be: "date","news","close". "close" is the closing price of that stock on the specified date. 
 (We suggest 10 news for each day should be appended and then given in same column.)
   **Note:  The dates in news train and test files should be same and in same order as in train and test files of the stock's data.**
